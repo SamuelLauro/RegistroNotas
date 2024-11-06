@@ -20,6 +20,7 @@ TEXT_COLOR = "#333333"
 LABEL_FONT = ("Arial", 16)
 BUTTON_FONT = ("Arial", 14)
 
+
 class SistemaEscola:
     def __init__(self, master):
         self.master = master
@@ -149,6 +150,7 @@ class SistemaEscola:
         else:
             messagebox.showwarning("Atenção", "Preencha todos os campos corretamente.")
 
+### Função para inserir notas de um aluno
     def cadastrar_disciplina(self):
         self.clear_window()
         self.create_label("Cadastrar Disciplina", 24)
@@ -157,6 +159,7 @@ class SistemaEscola:
         self.create_button("Cadastrar", self.registrar_disciplina)
         self.create_button("Voltar", self.tela_principal)
 
+### Função para inserir uma nova disciplina no banco de dados
     def registrar_disciplina(self):
         nome_disciplina = self.nome_disciplina_entry.get()
         nome_professor = self.professor_entry.get()
@@ -252,7 +255,7 @@ class SistemaEscola:
 
         self.create_button("Consultar", self.mostrar_notas)
         self.create_button("Voltar", self.tela_principal)
-
+        
     def mostrar_notas(self):
         nome_aluno = self.nome_aluno_combobox.get()
         nome_disciplina = self.nome_disciplina_combobox.get()

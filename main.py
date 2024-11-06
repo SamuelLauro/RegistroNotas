@@ -1,6 +1,6 @@
 from tkinter import Tk
 from interface import SistemaEscola
-from db import criar_tabelas  # Alterado para importar do db.py
+from db import criar_tabelas  # importar do db.py
 
 if __name__ == "__main__":
     criar_tabelas()  # Cria as tabelas se elas ainda não existirem

@@ -1,6 +1,7 @@
 import sqlite3
 import hashlib
 
+### Função para criar a tabela de usuários no banco de dados
 def criar_tabela_usuarios():
     with sqlite3.connect('sistema_escola.db') as conn:
         cursor = conn.cursor()
@@ -27,6 +28,7 @@ def cadastrar_usuario(username, password):
         except sqlite3.IntegrityError:
             return False
 
+### Função para autenticar um usuário
 def autenticar_usuario(username, password):
     hashed_password = hash_password(password)
     with sqlite3.connect('sistema_escola.db') as conn:
