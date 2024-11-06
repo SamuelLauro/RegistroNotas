@@ -1,34 +1,36 @@
 import sqlite3
+import hashlib
 
 def criar_tabela_usuarios():
-    conn = sqlite3.connect('sistema_escola.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS Usuarios (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT
-        )
-    ''')
-    conn.commit()
-    conn.close()
+    with sqlite3.connect('sistema_escola.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Usuarios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE,
+                password TEXT
+            )
+        ''')
+        conn.commit()
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()  # Usando SHA-256 para hash
 
 def cadastrar_usuario(username, password):
-    conn = sqlite3.connect('sistema_escola.db')
-    cursor = conn.cursor()
-    try:
-        cursor.execute('INSERT INTO Usuarios (username, password) VALUES (?, ?)', (username, password))
-        conn.commit()
-        return True
-    except sqlite3.IntegrityError:
-        return False
-    finally:
-        conn.close()
+    hashed_password = hash_password(password)
+    with sqlite3.connect('sistema_escola.db') as conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute('INSERT INTO Usuarios (username, password) VALUES (?, ?)', (username, hashed_password))
+            conn.commit()
+            return True
+        except sqlite3.IntegrityError:
+            return False
 
 def autenticar_usuario(username, password):
-    conn = sqlite3.connect('sistema_escola.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM Usuarios WHERE username = ? AND password = ?', (username, password))
-    user = cursor.fetchone()
-    conn.close()
-    return user is not None  # Retorna True se o usuário foi encontrado
+    hashed_password = hash_password(password)
+    with sqlite3.connect('sistema_escola.db') as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM Usuarios WHERE username = ? AND password = ?', (username, hashed_password))
+        user = cursor.fetchone()
+        return user is not None  # Retorna True se o usuário foi encontrado
